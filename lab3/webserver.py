@@ -72,24 +72,23 @@ class RequestHandler(BaseHTTPRequestHandler):
         print("  Request data: {}".format(self.requestline))
 
         # Phase 2: Which data do we want to send back?
-        if "data" in self.path:
+        if "data" in self.path: #Was any data requested?
             rstr = decode_url_back_to_string(self.path.split('?data=')[1])
             rdict = json_string_to_dictionary(extract_json_string(rstr))
-            print(rdict)
-            if not hasattr(self.server, "data") and "city" not in rdict:
+            if not hasattr(self.server, "data") and "city" not in rdict: #Is there data stored?
                 response = "No data stored yet."
-            elif "city" in rdict:
+            elif "city" in rdict: #Was a city requested? Use YR API?
                 response = "Temperature of {} is {}".format(rdict['city'],get_yr_forecast(rdict["city"]))
             else:
                 name = ""
-                if "sensor_name" in rdict:
+                if "sensor_name" in rdict: #Does data for this type exist?
                     name = rdict["sensor_name"]
-                    if name in self.server.data:
+                    if name in self.server.data: #Does data for this sensor exist?
                         response = "Temperature of {} is {}".format(name, self.load_data(name))
                     else:
                         response = "No data for given name"
         else:
-            response = "No data requested"
+            response = "No data requested" #Default response
 
         # Phase 3: Let's send back the data!
         response_in_bytes = string_to_unicode_bytes(response)

@@ -7,6 +7,8 @@ ON = Image.SQUARE
 OFF = Image.SQUARE_SMALL
 
 # 2 base state machine
+
+
 class StateMachine:
     """
     The following code segment defines a basis state machine.
@@ -82,9 +84,10 @@ class StateMachine:
                 if next_state:
                     self.state = next_state
             sleep(100)
-            
+
+
 class Dispenser(StateMachine):
-    
+
     def initial_transition(self, timers):
         display.show("R")
         return "ready"
@@ -94,18 +97,19 @@ class Dispenser(StateMachine):
             if event == "touch":
                 display.show(Image.ARROW_S)
                 music.play("C2:8")
-                timers.start("t1",800)
+                timers.start("t1", 800)
                 return "dispensing"
         if state == "dispensing":
             if event == "t1":
                 display.clear()
-                timers.start("t2",2000)
-                music.play(["C4:4","C4:4"])
+                timers.start("t2", 2000)
+                music.play(["C4:4", "C4:4"])
                 return "timelock"
         if state == "timelock":
             if event == "t2":
                 display.show("R")
                 return "ready"
-                
+
+
 stm = Dispenser()
 stm.run()

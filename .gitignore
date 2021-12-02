@@ -8,6 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 lab3/lab3env
+lab4/lab4env
 .Python
 build/
 develop-eggs/
